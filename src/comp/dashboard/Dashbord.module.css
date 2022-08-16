@@ -1,0 +1,196 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Mulish:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Mulish:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap");
+
+body {
+  margin: 0;
+  background: #ffffff !important;
+}
+
+* {
+  box-sizing: border-box;
+  /* background: #FFFFFF; */
+}
+
+.Maincontainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Sidesection {
+  min-width: 276px;
+  max-width: 276px;
+  height: 100vh;
+  position:fixed;
+  border-right: 2px solid #e0e0e0;
+  z-index: 888888;
+}
+
+.logoIcon {
+  display: flex;
+  padding: 21px 0 24px 40px;
+  border-bottom: 2px solid #e0e0e0;
+}
+.logoImage{
+  vertical-align:0%;
+}
+
+
+.logoMain {
+  width: 38px;
+  height: 38px;
+  background: #ededed;
+  text-align: center;
+  border-radius: 50px;
+  padding: 10px;
+  /* border: 2px solid #E0E0E0; */
+}
+
+.logoText {
+  margin-left: 32px;
+  font-family: "Inter";
+}
+
+.logoText p {
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 12px;
+  color: #b4b4b4;
+}
+
+.logoText h3 {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000;
+}
+
+.HomeMain {
+  padding: 19px 0 19px 47px;
+  border-bottom: 2px solid #e0e0e0;
+  display: flex;
+}
+
+.HomeLogoText {
+  display: flex;
+  margin-left: 15px;
+}
+
+.ArrowHome {
+  width: 10px;
+  height: 10px;
+  margin-top: 6px;
+  margin-left: 3px;
+}
+
+.HomeLogoText h4 {
+  font-family: "Inter";
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #000000;
+}
+.HomeLogoLink{
+  text-decoration: none;
+}
+.WishLink{
+  text-decoration: none;
+  color: #000000;
+  display: flex;
+}
+
+
+.HomeLogoText h3 {
+  font-family: "Inter";
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  color: #cdcdcd;
+  margin-top: 2px;
+}
+
+/* header section and navbar */
+
+.HeaderSection {
+  width: 100%;
+    padding-left: 276px;
+    position: fixed;
+    z-index: 99999;
+    background: #fff;
+}
+
+.UserProfile {
+  display: flex;
+  justify-content: flex-end;
+  padding: 30px 53px 22px 0;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.UserProfile h3 {
+  font-family: "Inter";
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  margin: auto 0;
+}
+
+.UserProfile img {
+  margin-right: 20px;
+}
+
+/* navbar section */
+
+.Navbar {
+  padding: 12px 144px 12px 0;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.WishNavbar {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.NavIcon {
+  display: flex;
+}
+.NavIconHEart{
+  display: flex;
+}
+
+.NavIconHEart h5{
+    margin: auto 0;
+      margin-left: 16px;
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 15px;
+}
+
+.NavIcon h5 {
+  margin: auto 0;
+  margin-left: 16px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+}
+
+.NavIcon h4 {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+  margin: auto 0;
+  margin-left: 5px;
+}
+
+
+.ProductDashBord{
+    width: 100%;
+    padding: 169px 69px 0 327px;
+}

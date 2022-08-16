@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+body {
+  font-family: "Mulish", sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+.SigInMain{
+    padding: 100px 0;
+    background: #e5e5e5;
+    height: 100vh;
+}
+.SignIn {
+  display: flex;
+  flex-direction: column;
+  width: 444px;
+  height: 454px;
+  border-radius: 4px;
+  margin: 0 auto;
+  background: #ffffff;
+  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.15);
+  padding: 50px 46px;
+  font-family: "Mulish";
+  box-sizing: border-box;
+  /* background: #e5e5e5; */
+}
+
+.SigInInput {
+  display: flex;
+  margin: 0;
+  height: 45px;
+  padding: 0px 12px;
+  border: 1px solid #dedede;
+  border-radius: 6px;
+  margin: 10px 0 15px 0;
+}
+
+.InputLable {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  color: #333333;
+}
+.SignIn p {
+  width: 121px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: #757575;
+  margin: 0 0 5px 0;
+}
+
+.SignIn h3 {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 30px;
+  margin: 0;
+  color: #333333;
+}
+
+.SignInForm {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  font-family: "Mulish";
+}
+
+.SignIn Button {
+  margin-top: 20px;
+  height: 45px;
+  padding: 13.5px 0;
+  background: linear-gradient(180deg, #625bf7 0%, #463eea 100%);
+  border-radius: 6px;
+  border: none;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.link{
+    display: flex;
+    width: 235px;
+    margin: 20px auto;
+    
+}
+
+
+.FirebaseError p{
+  width: auto ;
+  color:red;
+  
+}
+
+.InputError{
+  width: 100% !important;
+  color:red !important;
+}

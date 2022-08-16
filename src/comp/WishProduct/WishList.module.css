@@ -1,0 +1,38 @@
+.WishPageContainer {
+    width: 100%;
+    /* padding: 25px 69px 0 51px; */
+    /* border: 2px solid black; */
+}
+
+.WishHeader {
+    display: flex;
+}
+
+
+.WishHeader h1 {
+    font-family: "Inter";
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 29px;
+    margin-bottom: 17px;
+}
+
+.SearchButton {
+    /* margin-top: 17px; */
+    padding: 12px;
+    background-color: transparent;
+    border: 1px solid #D1D1D1;
+}
+
+.SearchBarInput {
+    padding: 12px 0 12px 7px;
+    width: 540px;
+    border: 1px solid #D1D1D1;
+}
+
+.WishCartWrapper {
+    margin-top: 46px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}

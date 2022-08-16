@@ -1,0 +1,131 @@
+.cartpagemain {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.cartpagecontain {
+    max-width: auto;
+    /* border: 2px solid black; */
+    height: 200px;
+    margin-top: 20px;
+    display: flex;
+    background: #ffffff;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.15);
+}
+
+.middelsection {
+    width: 75%;
+}
+
+
+.CartPRoductImgMain {
+    box-shadow: inset 1px 1px 10px 1px rgba(0, 0, 0, 0.15);
+    margin: 40px 10px 10px 30px;
+    padding: 10px;
+    /* border: 2px solid black; */
+    max-width: 200px;
+    max-height: 128px;
+    /* justify-content: center;     */
+}
+
+.CartPRoductImg {
+    width: 100%;
+    max-width: 224px;
+    max-height: 140px;
+
+}
+
+.CartProductSideSection {
+    padding: 20px 20px;
+    width: 100%;
+}
+
+.MainPriceButton {
+    width: 100%;
+    margin-top: 60px !important;
+    display: flex;
+    justify-content: space-between;
+}
+
+.CartProductSideSection p {
+    margin-top: 10px;
+
+}
+
+.ProductPrizeMain {
+    display: flex;
+}
+
+.ProductPrize {
+    margin-left: 20px;
+    text-decoration-line: line-through;
+}
+
+.prductQty {}
+
+.QtyInput {
+    text-align: center;
+    height: 38px;
+    width: 40px;
+    margin: 0px 5px;
+}
+
+
+
+
+
+
+.cartsidesection {
+    height: 500px;
+    width: 23%;
+    /* border: 2px solid black; */
+    margin-top: 30px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px 9px rgba(0, 0, 0, 0.15);
+
+}
+
+
+.pricetotal {
+    margin: 30px 0px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+}
+
+.pricetotalAmount {
+    /* margin: 30px 0px; */
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.pricetotalAmount p {
+    font-weight: bolder;
+
+}
+
+.PeiceTotalQty {
+    display: flex;
+
+}
+.RemoveMainDiv{
+    display: flex;
+    justify-content: space-between;
+}
+
+.RmoveButton{
+    color: white;
+    background-color: red;
+    border: none;
+    border-radius: 10%;
+
+}
+
+.PlaceOrderButton{
+    margin-top: 250px;
+    width: 238px;
+
+}

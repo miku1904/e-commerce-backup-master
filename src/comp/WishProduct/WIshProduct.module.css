@@ -1,0 +1,92 @@
+.ProductCart {
+    max-width: 277px;
+    min-width: 277px;
+    border: 1px solid #b1b1b1;
+    margin-bottom: 38px;
+  }
+  
+  .heartIcon{
+    /* height: 30px; */
+    width: 30px !important; 
+  }
+  .CartIconBlanck {
+        display: flex;
+          justify-content: flex-end;
+          padding: 0;
+          position: relative;
+          top: 21px;
+          right: 12px;
+  }
+  .ProductImage {
+    padding: 5px 26px 16px 26px;
+    border-bottom: 1px solid #b1b1b1;
+    
+  }
+  .ProductImage img{
+      width: 100%;
+      max-width: 224px;
+      max-height: 141px;
+      margin: 0 auto;
+      display: flex;
+  }
+  .IconImage_wrapper{
+  
+  }
+  
+  
+  
+  .menu_wrapper{
+    display: flex;
+    justify-content: space-between;
+  }
+  .ProductDetail {
+    padding: 15px 24px 20px 16px;
+  }
+  .ProductDetail h3 {
+    font-family: "Roboto";
+    max-width: 191px;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
+  }
+  .ProductPriceMain {
+    margin-top: 24px;
+  }
+  
+  .ProductPrice {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ProductPrice p {
+    color: #aaaaaa;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #aaaaaa;
+    margin-bottom: 3px;
+  }
+  .ProductPrice h4 {
+    margin-left: 4px;
+  }
+  .CartIcon {
+    margin-left: 95px;
+  }
+  
+  .ProductPrize {
+    font-family: "Roboto";
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+  }
+  
+  .ProductDiscountPrize {
+    color: #575757;
+    font-family: "Roboto"; 
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    text-decoration-line: line-through;
+  }
+  
