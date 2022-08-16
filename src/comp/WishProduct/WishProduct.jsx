@@ -20,8 +20,9 @@ const WishProduct = () => {
     try {
       await deleteDoc(doc(db, "wishlist", prod.Wishid));
       toast.info("Remove wishlist successfully", { theme: "colored" });
-      const docRef = doc(db, "Products", prod.id);
-      const docSnap = await updateDoc(docRef, { IsWishList: false });
+      // const docRef = doc(db, "Products", prod.id);
+      // const docSnap = await updateDoc(docRef, { IsWishList: false });
+      dispatch(Delete_WishProduct(prod.Wishid));
     } catch (WIshDeleteError) {
       console.log(WIshDeleteError, "WIshDeleteError");
     }

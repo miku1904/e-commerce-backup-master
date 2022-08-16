@@ -26,7 +26,9 @@ const WishProductReducer = (state = initialState, action) => {
       return [...state, action.payload];
 
     case DELETE_WISHPRODUCT:
-      return [];
+      return state.filter((item) => item.Wishid !== action.payload);  
+      // const Wstate = state.filter
+      // return [...state, action.payload];
 
     default:
       return state;

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Fetch_CartProduct } from "../../redux/action/CartAction";
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebase';
+import { Fetch_wishProduct } from '../../redux/action/WishAction';
 
 const ProductDashBord = () => {
 
@@ -39,6 +40,27 @@ const ProductDashBord = () => {
 
   //Fetch Wish product data //
 
+   const fetchWishListData = async () => {
+     try {
+       const q = query(
+         collection(db, "wishlist"),
+         where("userId", "==", userdetail?.uid)
+       );
+       const doc = await getDocs(q);
+       const data = [];
+
+       doc.forEach(async (doc) => {
+         data.push({ ...doc.data() });
+         dispatch(Fetch_wishProduct({ ...doc.data() }));
+       });
+     } catch (err) {
+       console.error(err);
+     }
+   };
+
+   useEffect(() => {
+     fetchWishListData();
+   }, []);
 
 
   

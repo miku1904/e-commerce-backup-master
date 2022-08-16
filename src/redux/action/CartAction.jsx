@@ -2,7 +2,8 @@ import {
   FETCH_CARTPRODUCT,
   ADD_CARTPRODUCT,
   ADD_QTY,
-  DEC_QTY
+  DEC_QTY,
+  REMOVE_CARTPRODUCT,
 } from "../actionType/CartActionType";
 
   export function Fetch_CartProduct(data) {
@@ -15,6 +16,13 @@ import {
   export function Add_CartProduct(data) {
     return {
       type: ADD_CARTPRODUCT,
+      payload: data,
+    };
+  }
+
+  export function Remove_CartProduct(data) {
+    return {
+      type: REMOVE_CARTPRODUCT,
       payload: data,
     };
   }

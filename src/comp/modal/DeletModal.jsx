@@ -1,15 +1,19 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { db } from "../../firebase";
+import { Delete_product } from "../../redux/action/ProductAction";
 import "./DeletModal.css"
 
 const DeletModal = ({prodId}) => {
+  const dispatch = useDispatch();
  
 
     const deleteProduct = async(id) => {
       // console.log(id); 
       try{
         await deleteDoc(doc(db , "Products", id))
+        dispatch(Delete_product(id));
       }catch{
 
       }

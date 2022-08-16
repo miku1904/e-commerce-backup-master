@@ -14,7 +14,7 @@ const AddProduct = () => {
   const [productData, setProductData] = useState({
     ProductName: "",
     ProductPrice: "",
-    IsWishList:false
+    // IsWishList:false
   });
   const [productImg, setProductimg] = useState(null);
   const [productReduxData ,setProductReduxData] = useState()
@@ -55,47 +55,16 @@ const AddProduct = () => {
             ProductName: productData.ProductName,
             ProductPrice: Number(productData.ProductPrice),
             ProductImg: url,
-            IsWishList:false
+            // IsWishList:false
           })  
-            console.log(productData, "productData") 
             dispatch(Add_Product(productData)); 
             toast.success("Add product successfully")
-        });
-      }
-      )
+          });
+        }
+        )
+          e.target.reset();
     }
-    //   setProductReduxData({
-    //   ProductName: productData.ProductName,
-    //   ProductPrice: Number(productData.ProductPrice),
-    //   ProductImg: url,
-    // })
 
-
-    // useEffect(() => {
-    //   // dispatch(Add_Product(productReduxData)) 
-    // }, []);
-    
-    //   )
-    // },
-    //   (err) =>
-    //     console.log(err),
-    //     ()=>{
-    //       getDownloadURL(ref(storage, `product-images/${productImg.name}`))
-    //       .then(async (url) => {
-    //         await addDoc(collection(db, "Products"), {
-    //           ProductName: productData.productName,
-    //           ProductPrice: Number(productData.ProductPrice),
-    //           ProductImg: url,
-    //         })
-    //           .catch((err) => console.log(err));
-    //       });
-    //   }
-    // );
-      
-    // })
-    // // uploadBytes(uploadRef, productImg)  
-    //   // ref(storage, `product-images/${productImg.name + v4()}`).getDownloadURL()
-    //   }
 
   return (
     <div>

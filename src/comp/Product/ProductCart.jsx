@@ -53,7 +53,7 @@ const ProductCart = () => {
           userId: userdetail?.uid,
           qty: 1,
         })
-        const pd = {...product,userId:userdetail?.uid,qty:1,cardId:data?.id}
+        const pd = {...product,userId:userdetail?.uid,qty:1,cartId:data?.id}
         await setDoc(doc(db, "cartproduct", data?.id), pd)
         dispatch( Add_CartProduct(pd))
         toast.info("Add to cart successfully", { icon: "🛒"  });
@@ -108,6 +108,7 @@ const ProductCart = () => {
     setprodId(prod);
     // console.log(prod)
   };
+
   const [wishListpro, setWishListpro] = useState([]);
   useEffect(() => {
     const a = [];
@@ -118,7 +119,11 @@ const ProductCart = () => {
     setWishListpro(a);
   }, []);
 
-  console.log(wishListpro);
+  // console.log(wishListpro);
+
+
+
+
 
   return (
     <>
