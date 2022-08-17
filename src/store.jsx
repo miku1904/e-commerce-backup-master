@@ -4,6 +4,7 @@ import productReducer from "./redux/reducer/ProductReducer";
 import WishProductReducer from "./redux/reducer/WishReducer";
 import thunk from "redux-thunk";
 import CartproductReducer from "./redux/reducer/CartReducer"
+// import { LOGOUT } from "./redux/actionType/UserType";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import style from "./ProductCart.module.css";
 import CartIcon from "../../asert/Cart.svg";
+import { Edit_WishProduct } from "../../redux/action/WishAction";
 import DotMenu from "../../asert/DotMenu.svg";
 import WishIcon from "../../asert/CartIconBlanck.svg";
 import WishIconREd from "../../asert/WIshIConRed.svg";
@@ -26,8 +27,6 @@ import { Add_CartProduct } from "../../redux/action/CartAction";
 import { async } from "@firebase/util";
 import { Fetch_CartProduct } from "../../redux/action/CartAction";
 
-
-
 const ProductCart = () => {
   const [prodId, setprodId] = useState();
   // const productsCollectionRef = collection(db, "Products");
@@ -37,52 +36,73 @@ const ProductCart = () => {
   const CartproductReducer = useSelector((state) => state.CartproductReducer);
   const userdetail = useSelector((state) => state.userReducer);
 
-  const AddToCartProduct = async (product) =>{
+  const addToWishList = async (product) => {
+    const wishListData = WishPoduct.find((item) => item.id === product.id);
 
+    console.log(userdetail?.uid);
+
+    if (wishListData) {
+      try {
+        const WishPd = {
+          ...product,
+          userId: [...wishListData.userId, userdetail?.uid],
+          Wishid: wishListData.Wishid,
+        };
+        await setDoc(doc(db, "wishlist", wishListData.Wishid), WishPd);
+        toast.info("Add to wishlist successfully", { theme: "colored" });
+        dispatch(Edit_WishProduct(WishPd));
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const data = await addDoc(collection(db, "wishlist"), {
+          ...product,
+          userId: [userdetail?.uid],
+        });
+
+        const WishPd = {
+          ...product,
+          userId: [userdetail?.uid],
+          Wishid: data?.id,
+        };
+        await setDoc(doc(db, "wishlist", data?.id), WishPd);
+        dispatch(Add_wishProduct(WishPd));
+        toast.info("Add to wishlist successfully", { theme: "colored" });
+      } catch (error) {
+        console.log(error, "id");
+      }
+    }
+  };
+
+  const AddToCartProduct = async (product) => {
     try {
-      let repeat = false
-      CartproductReducer?.map((item)=>{
-        if(item.id == product.id){
-          repeat = true
+      let repeat = false;
+      CartproductReducer?.map((item) => {
+        if (item.id == product.id) {
+          repeat = true;
         }
-      })
-      if(repeat == false){
-
+      });
+      if (repeat == false) {
         const data = await addDoc(collection(db, "cartproduct"), {
           ...product,
           userId: userdetail?.uid,
           qty: 1,
-        })
-        const pd = {...product,userId:userdetail?.uid,qty:1,cartId:data?.id}
-        await setDoc(doc(db, "cartproduct", data?.id), pd)
-        dispatch( Add_CartProduct(pd))
-        toast.info("Add to cart successfully", { icon: "🛒"  });
-
-      }
-      else{
-        toast.error("This product already added", { icon: "🛒"  });
+        });
+        const pd = {
+          ...product,
+          userId: userdetail?.uid,
+          qty: 1,
+          cartId: data?.id,
+        };
+        await setDoc(doc(db, "cartproduct", data?.id), pd);
+        dispatch(Add_CartProduct(pd));
+        toast.info("Add to cart successfully", { icon: "🛒" });
+      } else {
+        toast.error("This product already added", { icon: "🛒" });
       }
     } catch (error) {
       console.log(error, "Addtocart");
-    }
-  }
-
-
-  const addToWishList = async (product) => {
-    console.log(product);
-
-    try {
-      const data = await addDoc(collection(db, "wishlist"), {
-        ...product,
-        userId: userdetail?.uid,
-      });
-      const WishPd = { ...product, userId: userdetail?.uid, Wishid: data?.id };
-      await setDoc(doc(db, "wishlist", data?.id), WishPd);
-      dispatch(Add_wishProduct(WishPd));
-      toast.info("Add to wishlist successfully", { theme: "colored" });
-
-    } catch (error) {
-      console.log(error, "id");
     }
   };
 
@@ -103,7 +123,6 @@ const ProductCart = () => {
     fetchProductData();
   }, []);
 
-
   const getProductId = (prod) => {
     setprodId(prod);
     // console.log(prod)
@@ -111,19 +130,18 @@ const ProductCart = () => {
 
   const [wishListpro, setWishListpro] = useState([]);
   useEffect(() => {
-    const a = [];
-    WishPoduct.forEach((item) => {
-      a.push(item.id);
+    let data = WishPoduct.map((item) => {
+      if (item.userId.includes(userdetail.uid)) {
+        return item;
+      }
     });
-
-    setWishListpro(a);
-  }, []);
-
-  // console.log(wishListpro);
-
-
-
-
+    data = data.filter((item) => item !== undefined);
+    const a = [];
+    data.forEach((item) => {
+     a.push(item.id);
+    });
+     setWishListpro(a);
+  }, [WishPoduct]);
 
   return (
     <>

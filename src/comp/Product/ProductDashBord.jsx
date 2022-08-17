@@ -44,7 +44,6 @@ const ProductDashBord = () => {
      try {
        const q = query(
          collection(db, "wishlist"),
-         where("userId", "==", userdetail?.uid)
        );
        const doc = await getDocs(q);
        const data = [];

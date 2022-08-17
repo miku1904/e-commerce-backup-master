@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import style from "./Dashbord.module.css"
 import logo from "../../asert/logo.svg"
 import Home from "../../asert/Home.svg"
@@ -17,6 +17,7 @@ import { ToastContainer } from 'react-toastify'
 const Dashbord = ({children}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [wishlistData, setWishListData] = useState([]);
 
   const userdetail = useSelector((state) => state.userReducer);
   const WishList = useSelector((state) => state.WishProductReducer);
@@ -34,6 +35,13 @@ const Dashbord = ({children}) => {
     dispatch(LogoutUser(userdata));
     navigate("/");
   };
+
+   useEffect(() => {
+     const data = WishList.filter((item) =>
+       item.userId.includes(userdetail.uid)
+     );
+     setWishListData(data);
+   }, [WishList]);
 
   return (
     <>
@@ -85,7 +93,7 @@ const Dashbord = ({children}) => {
                 <div className={style.NavIconHEart}>
                   <Link to="/WishListdashboard" className={style.WishLink}>
                     <img src={HeartIcon} alt="heart" />
-                    <h5>Wish List ({WishList.length})</h5>
+                    <h5>Wish List ({wishlistData.length})</h5>
                   </Link>
                 </div>
                 <div className={style.NavIcon}>

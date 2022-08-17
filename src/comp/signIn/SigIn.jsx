@@ -26,7 +26,7 @@ const handleLogInChange = (e) =>{
   });
   
 }
-console.log(ldata)
+// console.log(ldata)
 
 const handleSubmit = (e) =>{
    e.preventDefault();

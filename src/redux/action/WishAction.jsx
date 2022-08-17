@@ -1,8 +1,9 @@
 import {
-    FETCH_WISHPRODUCT,
-    ADD_WISHPRODUCT,
-    DELETE_WISHPRODUCT
-  } from "../actionType/WishType";
+  FETCH_WISHPRODUCT,
+  ADD_WISHPRODUCT,
+  DELETE_WISHPRODUCT,
+  EDIT_WISHPRODUCT,
+} from "../actionType/WishType";
   
   export function Fetch_wishProduct(data) {
     return {
@@ -23,3 +24,14 @@ import {
       
     };
   }
+
+  export function Edit_WishProduct(data) {
+    return {
+      type: EDIT_WISHPRODUCT,
+      payload: data,
+    };
+  }
+
+  
+
+  

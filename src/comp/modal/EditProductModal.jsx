@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./EditProduct.css";
 import { useDispatch, useSelector } from "react-redux";
+import { Edit_product } from "../../redux/action/ProductAction";
 import { storage, db } from "../../firebase";
 import { v4 } from "uuid";
 import { toast } from "react-toastify";
@@ -19,6 +20,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 
 const EditProductModal = ({ prodId, getProducts }) => {
+  const dispatch = useDispatch();
   
   const [productImg, setProductimg] = useState();
   const [productData, setProductData] = useState({
@@ -71,6 +73,14 @@ const EditProductModal = ({ prodId, getProducts }) => {
               ProductPrice: productData.ProductPrice,
             }).catch((err) => console.log(err));
             toast.success("Edit data successfully");
+            dispatch(
+              Edit_product({
+                ProductName: productData.ProductName,
+                ProductImg: productData.ProductImg,
+                ProductPrice: productData.ProductPrice,
+                id: prodId,
+              })
+            );
           });
         }
       );
@@ -81,6 +91,14 @@ const EditProductModal = ({ prodId, getProducts }) => {
         ProductPrice: productData.ProductPrice,
       }).catch((err) => console.log(err));
       // toast.success("Edit data successfully")
+      dispatch(
+        Edit_product({
+          ProductName: productData.ProductName,
+          ProductImg: productData.ProductImg,
+          ProductPrice: productData.ProductPrice,
+          id: prodId,
+        })
+      );
     }
     getProducts();
   };
@@ -146,7 +164,11 @@ const EditProductModal = ({ prodId, getProducts }) => {
                     onChange={handlechange}
                   />
                 </div>
-                <button className="btn btn-primary" type="submit">
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  data-bs-dismiss="modal"
+                >
                   Edit Product
                 </button>
               </form>
