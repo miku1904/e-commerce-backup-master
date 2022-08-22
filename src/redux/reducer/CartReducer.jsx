@@ -16,7 +16,7 @@ const CartproductReducer = (state = initialState, action) => {
       const uState = [...state, action.payload];
       const uniqueIds = [];
       const unique = uState.filter((element) => {
-        console.log(element.id, "cartid");
+        // console.log(element.id, "cartid");
         const isDuplicate = uniqueIds.includes(element.id);
         if (!isDuplicate) {
           uniqueIds.push(element.id);

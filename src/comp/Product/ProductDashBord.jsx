@@ -18,8 +18,8 @@ const ProductDashBord = () => {
   const fetchCartData = async () => {
     try {
       const q = query(
-        collection(db, "cartproduct"),
-        where("userId", "==", userdetail?.uid)
+        collection(db, "cartproduct")
+        // where("userId", "==", userdetail?.uid)
       );
 
       const doc = await getDocs(q);

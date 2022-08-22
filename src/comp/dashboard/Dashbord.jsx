@@ -18,6 +18,8 @@ const Dashbord = ({children}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [wishlistData, setWishListData] = useState([]);
+  const [CartData, setCartData] = useState([]);
+
 
   const userdetail = useSelector((state) => state.userReducer);
   const WishList = useSelector((state) => state.WishProductReducer);
@@ -42,6 +44,11 @@ const Dashbord = ({children}) => {
      );
      setWishListData(data);
    }, [WishList]);
+
+    useEffect(() => {
+      const data = cartproduct.filter((item) => item.userId === userdetail.uid);
+      setCartData(data);
+    }, [cartproduct]);
 
   return (
     <>
@@ -99,7 +106,7 @@ const Dashbord = ({children}) => {
                 <div className={style.NavIcon}>
                   <Link to="/Cartdashboard" className={style.WishLink}>
                     <img src={Cart} alt="Cart" />
-                    <h5>({cartproduct.length}) Products -</h5>
+                    <h5>({CartData.length}) Products -</h5>
                   </Link>
                   <h4>$1000</h4>
                 </div>

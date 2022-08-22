@@ -25,14 +25,14 @@ const CartProduct = () => {
   const dispatch = useDispatch();
   const userdetail = useSelector((state) => state.userReducer);
   const cartproduct = useSelector((state) => state.CartproductReducer);
-
   const [tPrice, setTPrice] = useState();
+      const [CartData, setCartData] = useState([]);
 
   const fetchCartData = async () => {
     try {
       const q = query(
-        collection(db, "cartproduct"),
-        where("userId", "==", userdetail?.uid)
+        collection(db, "cartproduct")
+        // where("userId", "==", userdetail?.uid)
       );
 
       const doc = await getDocs(q);
@@ -89,11 +89,34 @@ const CartProduct = () => {
 
   useEffect(totalPrice, [totalPrice]);
 
+  const PlaceOrder =() =>{
+    let data = cartproduct.map((item) => {
+      if (item.userId === userdetail.uid ){
+        return item;
+      }
+    });
+      // data = data.filter((item) => item !== undefined);
+        const a = [];
+        data.forEach((item) => {
+          a.push(item);
+        });
+
+        console.log(a, "dha")
+
+  }
+useEffect(() => {
+  console.log(cartproduct);
+  const data = cartproduct.filter((item) => item.userId === userdetail.uid);
+  setCartData(data)
+}, [cartproduct]);
+console.log(CartData)
+
+  
   return (
     <>
       <div className={style.cartpagemain}>
         <div className={style.middelsection}>
-          {cartproduct.map((prod, index) => {
+          {CartData.map((prod, index) => {
             return (
               <div className={style.cartpagecontain}>
                 <div className={style.CartPRoductImgMain}>
@@ -105,7 +128,12 @@ const CartProduct = () => {
                 <div className={style.CartProductSideSection}>
                   <div className={style.RemoveMainDiv}>
                     <h5>Product Name : {prod.ProductName}</h5>
-                    <button className={style.RmoveButton} onClick={()=>Removecart(prod)}>Remove</button>
+                    <button
+                      className={style.RmoveButton}
+                      onClick={() => Removecart(prod)}
+                    >
+                      Remove
+                    </button>
                   </div>
                   <p>Promo Code: 10521</p>
                   <div className={style.MainPriceButton}>
@@ -155,14 +183,16 @@ const CartProduct = () => {
               <p>price :</p>
               <p> (1 item)</p>
             </div>
-            <p>$ 1500</p>
+            <p>$ {tPrice}</p>
           </div>
           <hr />
           <div className={style.pricetotalAmount}>
             <p>Total Amount</p>
             <p>$ {tPrice}</p>
           </div>
-          {/* <button class={style.PlaceOrderButton}>place order</button> */}
+          <button class={style.PlaceOrderButton} onClick={PlaceOrder}>
+            place order
+          </button>
         </div>
       </div>
     </>

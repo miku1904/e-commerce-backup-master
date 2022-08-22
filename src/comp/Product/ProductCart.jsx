@@ -22,10 +22,7 @@ import DeletModal from "../modal/DeletModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Add_wishProduct } from "../../redux/action/WishAction";
-import { Edit_product } from "../../redux/action/ProductAction";
 import { Add_CartProduct } from "../../redux/action/CartAction";
-import { async } from "@firebase/util";
-import { Fetch_CartProduct } from "../../redux/action/CartAction";
 
 const ProductCart = () => {
   const [prodId, setprodId] = useState();
@@ -38,9 +35,7 @@ const ProductCart = () => {
 
   const addToWishList = async (product) => {
     const wishListData = WishPoduct.find((item) => item.id === product.id);
-
-    console.log(userdetail?.uid);
-
+    // console.log(userdetail?.uid);
     if (wishListData) {
       try {
         const WishPd = {
@@ -60,7 +55,6 @@ const ProductCart = () => {
           ...product,
           userId: [userdetail?.uid],
         });
-
         const WishPd = {
           ...product,
           userId: [userdetail?.uid],
@@ -70,40 +64,88 @@ const ProductCart = () => {
         dispatch(Add_wishProduct(WishPd));
         toast.info("Add to wishlist successfully", { theme: "colored" });
       } catch (error) {
-        console.log(error, "id");
+        console.log(error, "Add to wish error");
       }
     }
   };
 
+
+
+
   const AddToCartProduct = async (product) => {
-    try {
-      let repeat = false;
-      CartproductReducer?.map((item) => {
-        if (item.id == product.id) {
-          repeat = true;
+    const UserCartData = CartproductReducer.find(
+      (item) => item.userId === userdetail?.uid
+    );
+  console.log(UserCartData);
+        if (UserCartData) {
+          try{
+            const cd = {
+              producId: product.id,
+              quantity: 1,
+            };
+            const pd = {
+              userId: userdetail?.uid,
+              cartId: UserCartData.cartId,
+              cartproduct: [
+                ...UserCartData.cartproduct,
+                cd
+              ],
+            };
+            await setDoc(doc(db, "cartproduct", UserCartData.cartId), pd);
+            dispatch(Add_CartProduct(pd));
+          }catch{
+
+          }
         }
-      });
-      if (repeat == false) {
-        const data = await addDoc(collection(db, "cartproduct"), {
-          ...product,
-          userId: userdetail?.uid,
-          qty: 1,
-        });
-        const pd = {
-          ...product,
-          userId: userdetail?.uid,
-          qty: 1,
-          cartId: data?.id,
-        };
-        await setDoc(doc(db, "cartproduct", data?.id), pd);
-        dispatch(Add_CartProduct(pd));
-        toast.info("Add to cart successfully", { icon: "🛒" });
-      } else {
-        toast.error("This product already added", { icon: "🛒" });
-      }
-    } catch (error) {
-      console.log(error, "Addtocart");
-    }
+     
+
+
+      // const data = await addDoc(collection(db, "cartproduct"), {
+      //   // cartproduct: [product.id],
+      //   userId: userdetail?.uid,
+      // });
+
+      // const pd = {
+      //   // cartproduct: [product.id],
+      //   userId: userdetail?.uid,
+      //   cartId: data?.id,
+      //   cartproduct: [
+      //     { producId: product.id, quantity: 1 },
+      //     { producId: product.id, quantity: 1 },
+      //     // { producId: "abcd", quantity: 2 },
+      //   ],
+      // };
+      // await setDoc(doc(db, "cartproduct", data?.id), pd);
+    
+
+    // try {
+    //   let repeat = false;
+    //   CartproductReducer?.map((item) => {
+    //     if (item.id == product.id) {
+    //       repeat = true;
+    //     }
+    //   });
+    //   if (repeat == false) {
+    //     const data = await addDoc(collection(db, "cartproduct"), {
+    //       ...product,
+    //       userId: userdetail?.uid,
+    //       qty: 1,
+    //     });
+    //     const pd = {
+    //       ...product,
+    //       userId: userdetail?.uid,
+    //       qty: 1,
+    //       cartId: data?.id,
+    //     };
+    //     await setDoc(doc(db, "cartproduct", data?.id), pd);
+    //     dispatch(Add_CartProduct(pd));
+    //     toast.info("Add to cart successfully", { icon: "🛒" });
+    //   } else {
+    //     toast.error("This product already added", { icon: "🛒" });
+    //   }
+    // } catch (error) {
+    //   console.log(error, "Addtocart");
+    // }
   };
 
   const fetchProductData = async () => {
@@ -138,9 +180,9 @@ const ProductCart = () => {
     data = data.filter((item) => item !== undefined);
     const a = [];
     data.forEach((item) => {
-     a.push(item.id);
+      a.push(item.id);
     });
-     setWishListpro(a);
+    setWishListpro(a);
   }, [WishPoduct]);
 
   return (
@@ -156,7 +198,7 @@ const ProductCart = () => {
                       src={WishIconREd}
                       alt=""
                       type="button"
-                      onClick={() => addToWishList(prod)}
+                      // onClick={() => addToWishList(prod)}
                     />
                   </>
                 ) : (

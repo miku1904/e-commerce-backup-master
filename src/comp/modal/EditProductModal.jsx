@@ -19,7 +19,7 @@ import {
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 
-const EditProductModal = ({ prodId, getProducts }) => {
+const EditProductModal = ({ prodId }) => {
   const dispatch = useDispatch();
   
   const [productImg, setProductimg] = useState();
@@ -76,7 +76,7 @@ const EditProductModal = ({ prodId, getProducts }) => {
             dispatch(
               Edit_product({
                 ProductName: productData.ProductName,
-                ProductImg: productData.ProductImg,
+                ProductImg: url,
                 ProductPrice: productData.ProductPrice,
                 id: prodId,
               })
@@ -90,7 +90,7 @@ const EditProductModal = ({ prodId, getProducts }) => {
         ProductImg: productData.ProductImg,
         ProductPrice: productData.ProductPrice,
       }).catch((err) => console.log(err));
-      // toast.success("Edit data successfully")
+      toast.success("Edit data successfully")
       dispatch(
         Edit_product({
           ProductName: productData.ProductName,
@@ -99,8 +99,7 @@ const EditProductModal = ({ prodId, getProducts }) => {
           id: prodId,
         })
       );
-    }
-    getProducts();
+    } 
   };
 
   return (
@@ -149,9 +148,7 @@ const EditProductModal = ({ prodId, getProducts }) => {
                     className="form-control mb-3"
                     id="exampleFormControlInput1"
                     placeholder="productName"
-                    // defaultValue={productName}
                     value={productData?.ProductName}
-                    // defaultValue={productdetail?.ProductName}
                     onChange={handlechange}
                   />
                   <input
@@ -190,67 +187,3 @@ const EditProductModal = ({ prodId, getProducts }) => {
 };
 
 export default EditProductModal;
-
-// try {
-//   await setDoc(doc(db, "Products", editproductId), productData);
-// } catch (error) {
-//   console.log(error);
-// }
-
-// productData.id = editproductId;
-// console.log(productData.id);
-//   try {
-//   const q = query(
-//     collection(db, "Products"),
-//     where("id", "==", productData.id)
-//   )
-//   console.log(q)
-//   const querySnapshot = await getDocs(q);
-//   console.log(querySnapshot);
-//   let docId;
-//   querySnapshot.forEach((doc) => {
-//     docId = doc.id
-//     {console.log(docId)}
-//   })
-//   const collectionRef = doc(db, "Products", docId);
-//   console.log(collectionRef)
-//   // await updateDoc(collectionRef, {
-//   //       ProductName: productData.ProductName,
-//   //       ProductPrice: Number(productData.ProductPrice),
-//   //       // ProductImg: url,
-//   // });
-//   }catch (error) {
-//   console.log(error);
-// }
-
-// // Pid = productdetail;
-// // const storageRef = ref(storage, `product-images/${productImg.name + v4()}`);
-// // const upload = uploadBytesResumable(storageRef, productImg);
-// const q = query(collection(db, "Products"), where("id", "=="));
-// const querySnapshot = await getDocs(q);
-// // console.log(querySnapshot, "querySnapshot");
-// let docId
-// querySnapshot.forEach((doc) => {
-//  docId = doc.id;
-// });
-// console.log(docId)
-//  const collectionRef = doc(db, "Products", docId);
-//   await updateDoc(collectionRef, {
-//     ProductName: productData.ProductName,
-//     ProductPrice: Number(productData.ProductPrice),
-//     // ProductImg: url,
-//   }).catch((err) => console.log(err));
-
-// upload.on(
-//   "state_changed",
-//   (snapshot) => {
-//     const prog = Math.round(
-//       (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-//     );
-//     console.log(prog);
-//   },
-//   (err) => console.log(err),
-// () => {
-// getDownloadURL(upload.snapshot.ref)
-// }
-// );
