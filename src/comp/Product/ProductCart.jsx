@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import style from "./ProductCart.module.css";
 import CartIcon from "../../asert/Cart.svg";
+import { Edit_CartProduct } from "../../redux/action/CartAction";
 import { Edit_WishProduct } from "../../redux/action/WishAction";
 import DotMenu from "../../asert/DotMenu.svg";
 import WishIcon from "../../asert/CartIconBlanck.svg";
@@ -69,83 +70,44 @@ const ProductCart = () => {
     }
   };
 
-
-
-
   const AddToCartProduct = async (product) => {
-    const UserCartData = CartproductReducer.find(
+    const cartData = CartproductReducer.find(
       (item) => item.userId === userdetail?.uid
     );
-  console.log(UserCartData);
-        if (UserCartData) {
-          try{
-            const cd = {
-              producId: product.id,
-              quantity: 1,
-            };
-            const pd = {
-              userId: userdetail?.uid,
-              cartId: UserCartData.cartId,
-              cartproduct: [
-                ...UserCartData.cartproduct,
-                cd
-              ],
-            };
-            await setDoc(doc(db, "cartproduct", UserCartData.cartId), pd);
-            dispatch(Add_CartProduct(pd));
-          }catch{
-
-          }
-        }
-     
-
-
-      // const data = await addDoc(collection(db, "cartproduct"), {
-      //   // cartproduct: [product.id],
-      //   userId: userdetail?.uid,
-      // });
-
-      // const pd = {
-      //   // cartproduct: [product.id],
-      //   userId: userdetail?.uid,
-      //   cartId: data?.id,
-      //   cartproduct: [
-      //     { producId: product.id, quantity: 1 },
-      //     { producId: product.id, quantity: 1 },
-      //     // { producId: "abcd", quantity: 2 },
-      //   ],
-      // };
-      // await setDoc(doc(db, "cartproduct", data?.id), pd);
-    
-
-    // try {
-    //   let repeat = false;
-    //   CartproductReducer?.map((item) => {
-    //     if (item.id == product.id) {
-    //       repeat = true;
-    //     }
-    //   });
-    //   if (repeat == false) {
-    //     const data = await addDoc(collection(db, "cartproduct"), {
-    //       ...product,
-    //       userId: userdetail?.uid,
-    //       qty: 1,
-    //     });
-    //     const pd = {
-    //       ...product,
-    //       userId: userdetail?.uid,
-    //       qty: 1,
-    //       cartId: data?.id,
-    //     };
-    //     await setDoc(doc(db, "cartproduct", data?.id), pd);
-    //     dispatch(Add_CartProduct(pd));
-    //     toast.info("Add to cart successfully", { icon: "🛒" });
-    //   } else {
-    //     toast.error("This product already added", { icon: "🛒" });
-    //   }
-    // } catch (error) {
-    //   console.log(error, "Addtocart");
-    // }
+    if (cartData) {
+      try {
+        const cartProduct = {
+          userId: userdetail?.uid,
+          cartId: cartData.cartId,
+          prodectDetail: [
+            ...cartData.prodectDetail,
+            { id: product.id, quantity: 1 },
+          ],
+        };
+        await setDoc(doc(db, "cart", cartData.cartId), cartProduct);
+        toast.info("Add to cart successfully", { theme: "colored" });
+        dispatch(Edit_CartProduct(cartProduct));
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const data = await addDoc(collection(db, "cart"), {
+          userId: userdetail?.uid,
+          prodectDetail: [{ id: product.id, quantity: 1 }],
+        });
+        const cartPoduct = {
+          userId: userdetail?.uid,
+          prodectDetail: [{ id: product.id, quantity: 1 }],
+          cartId: data?.id,
+        };
+        await setDoc(doc(db, "cart", data?.id), cartPoduct);
+        dispatch(Add_CartProduct(cartPoduct));
+        toast.info("Add to cart successfully", { theme: "colored" });
+      } catch (error) {
+        console.log(error, "Add to cart error");
+      }
+    }
   };
 
   const fetchProductData = async () => {
@@ -280,3 +242,49 @@ const ProductCart = () => {
 };
 
 export default ProductCart;
+
+// const data = await addDoc(collection(db, "cartproduct"), {
+//   // cartproduct: [product.id],
+//   userId: userdetail?.uid,
+// });
+
+// const pd = {
+//   // cartproduct: [product.id],
+//   userId: userdetail?.uid,
+//   cartId: data?.id,
+//   cartproduct: [
+//     { producId: product.id, quantity: 1 },
+//     { producId: product.id, quantity: 1 },
+//     // { producId: "abcd", quantity: 2 },
+//   ],
+// };
+// await setDoc(doc(db, "cartproduct", data?.id), pd);
+
+// try {
+//   let repeat = false;
+//   CartproductReducer?.map((item) => {
+//     if (item.id == product.id) {
+//       repeat = true;
+//     }
+//   });
+//   if (repeat == false) {
+//     const data = await addDoc(collection(db, "cartproduct"), {
+//       ...product,
+//       userId: userdetail?.uid,
+//       qty: 1,
+//     });
+//     const pd = {
+//       ...product,
+//       userId: userdetail?.uid,
+//       qty: 1,
+//       cartId: data?.id,
+//     };
+//     await setDoc(doc(db, "cartproduct", data?.id), pd);
+//     dispatch(Add_CartProduct(pd));
+//     toast.info("Add to cart successfully", { icon: "🛒" });
+//   } else {
+//     toast.error("This product already added", { icon: "🛒" });
+//   }
+// } catch (error) {
+//   console.log(error, "Addtocart");
+// }

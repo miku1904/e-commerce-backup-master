@@ -1,6 +1,7 @@
 import {
   FETCH_CARTPRODUCT,
   ADD_CARTPRODUCT,
+  EDIT_CARTPRODUCT,
   ADD_QTY,
   DEC_QTY,
   REMOVE_CARTPRODUCT,
@@ -13,13 +14,14 @@ let initialState = [];
 const CartproductReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_CARTPRODUCT:
+      // return [...state, action.payload];
+
       const uState = [...state, action.payload];
       const uniqueIds = [];
       const unique = uState.filter((element) => {
-        // console.log(element.id, "cartid");
-        const isDuplicate = uniqueIds.includes(element.id);
+        const isDuplicate = uniqueIds.includes(element.cartId);
         if (!isDuplicate) {
-          uniqueIds.push(element.id);
+          uniqueIds.push(element.cartId);
           return true;
         }
         return false;
@@ -29,6 +31,12 @@ const CartproductReducer = (state = initialState, action) => {
 
     case ADD_CARTPRODUCT:
       return [...state, action.payload];
+
+    case EDIT_CARTPRODUCT:
+      const updatedState = state.map((product) =>
+        product.id === action.payload.id ? action.payload : product
+      );
+      return updatedState;
 
     case REMOVE_CARTPRODUCT:
       return state.filter((item) => item.cartId !== action.payload);

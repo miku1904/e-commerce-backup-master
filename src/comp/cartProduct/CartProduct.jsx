@@ -9,6 +9,8 @@ import {
   doc,
   deleteDoc,
 } from "firebase/firestore";
+import { Edit_CartProduct } from "../../redux/action/CartAction";
+import { Fetch_Product } from "../../redux/action/ProductAction";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Add_Qty,
@@ -25,21 +27,33 @@ const CartProduct = () => {
   const dispatch = useDispatch();
   const userdetail = useSelector((state) => state.userReducer);
   const cartproduct = useSelector((state) => state.CartproductReducer);
+  const productdetail = useSelector((state) => state.productReducer);
   const [tPrice, setTPrice] = useState();
-      const [CartData, setCartData] = useState([]);
+  const [CartData, setCartData] = useState([]);
+
+  const fetchProductData = async () => {
+    try {
+      const q = query(collection(db, "Products"));
+      const doc = await getDocs(q);
+
+      doc.forEach((doc) => {
+        dispatch(Fetch_Product({ ...doc.data(), id: doc.id }));
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductData();
+  }, []);
 
   const fetchCartData = async () => {
     try {
-      const q = query(
-        collection(db, "cartproduct")
-        // where("userId", "==", userdetail?.uid)
-      );
-
+      const q = query(collection(db, "cart"));
       const doc = await getDocs(q);
-      const data = [];
-
       doc.forEach(async (doc) => {
-        data.push({ ...doc.data() });
+        // console.log({ ...doc.data() });
         dispatch(Fetch_CartProduct({ ...doc.data() }));
       });
     } catch (err) {
@@ -51,15 +65,56 @@ const CartProduct = () => {
     fetchCartData();
   }, []);
 
-  const Removecart =async (prod) =>{
-    try {
-      await deleteDoc(doc(db, "cartproduct", prod.cartId));
-      toast.info("Remove cartproduct successfully", { icon: "🛒" });
-      dispatch(Remove_CartProduct(prod.cartId));
-    } catch (CartDeleteError) {
-      console.log(CartDeleteError, "CartDeleteError");
-    }
-  }
+  useEffect(() => {
+    const data = cartproduct.filter((item) => item.userId === userdetail.uid);
+    const productId = [];
+    data.map((item) =>
+      item.prodectDetail.map((data) =>
+        productId.push({ ...data, cartId: item.cartId })
+      )
+    );
+    const carddata = productdetail.filter((item) => {
+      for (var i = 0; i <= productId.length; i++) {
+        if (productId[i]?.id === item.id) {
+          item["quantity"] = productId[i]?.quantity;
+          item["cartId"] = productId[i]?.cartId;
+          return item;
+        }
+      }
+    });
+    setCartData(carddata);
+  }, [cartproduct, productdetail]);
+
+  const Removecart = async (prod) => {
+    const data = cartproduct.map((item) => {
+      if (item.cartId === prod.cartId && item.userId === userdetail.uid) {
+        item.prodectDetail.map((data) =>{
+          if(data.id === prod.id){
+            
+          }
+        } );
+      }
+    });
+        console.log(data)
+
+    // try {
+    //   const cartProduct = {
+    //     userId: userdetail?.uid,
+    //     cartId: cartData.cartId,
+    //     prodectDetail: [
+    //       ...cartData.prodectDetail,
+    //       { id: product.id, quantity: 1 },
+    //     ],
+    //   };
+    //   await setDoc(doc(db, "cart", prod.cartId), cartProduct);
+    //   toast.info("Product deleted from cart successfully", {
+    //     theme: "colored",
+    //   });
+    //   dispatch(Edit_CartProduct(cartProduct));
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  };
 
   const onIncrementQty = async (product) => {
     console.log("prod");
@@ -89,29 +144,21 @@ const CartProduct = () => {
 
   useEffect(totalPrice, [totalPrice]);
 
-  const PlaceOrder =() =>{
+  const PlaceOrder = () => {
     let data = cartproduct.map((item) => {
-      if (item.userId === userdetail.uid ){
+      if (item.userId === userdetail.uid) {
         return item;
       }
     });
-      // data = data.filter((item) => item !== undefined);
-        const a = [];
-        data.forEach((item) => {
-          a.push(item);
-        });
+    // data = data.filter((item) => item !== undefined);
+    const a = [];
+    data.forEach((item) => {
+      a.push(item);
+    });
 
-        console.log(a, "dha")
+    console.log(a, "dha");
+  };
 
-  }
-useEffect(() => {
-  console.log(cartproduct);
-  const data = cartproduct.filter((item) => item.userId === userdetail.uid);
-  setCartData(data)
-}, [cartproduct]);
-console.log(CartData)
-
-  
   return (
     <>
       <div className={style.cartpagemain}>
@@ -155,7 +202,7 @@ console.log(CartData)
                           <input
                             type="text"
                             className={style.QtyInput}
-                            value={prod.qty}
+                            value={prod.quantity}
                             id="textbox"
                           />
                         </li>

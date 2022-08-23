@@ -15,27 +15,27 @@ const ProductDashBord = () => {
   const userdetail = useSelector((state) => state.userReducer);
 
   //Fetch cart product data // 
-  const fetchCartData = async () => {
-    try {
-      const q = query(
-        collection(db, "cartproduct")
-        // where("userId", "==", userdetail?.uid)
-      );
+  // const fetchCartData = async () => {
+  //   try {
+  //     const q = query(
+  //       collection(db, "cart")
+  //       // where("userId", "==", userdetail?.uid)
+  //     );
 
-      const doc = await getDocs(q);
-      const data = [];
+  //     const doc = await getDocs(q);
+  //     const data = [];
 
-      doc.forEach(async (doc) => {
-        data.push({ ...doc.data() });
-        dispatch(Fetch_CartProduct({ ...doc.data() }));
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  useEffect(() => {
-    fetchCartData();
-  }, []);
+  //     doc.forEach(async (doc) => {
+  //       data.push({ ...doc.data() });
+  //       dispatch(Fetch_CartProduct({ ...doc.data() }));
+  //     });
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchCartData();
+  // }, []);
 
 
   //Fetch Wish product data //

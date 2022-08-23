@@ -1,6 +1,7 @@
 import {
   FETCH_CARTPRODUCT,
   ADD_CARTPRODUCT,
+  EDIT_CARTPRODUCT,
   ADD_QTY,
   DEC_QTY,
   REMOVE_CARTPRODUCT,
@@ -19,6 +20,15 @@ import {
       payload: data,
     };
   }
+
+   export function Edit_CartProduct(data) {
+     return {
+       type:EDIT_CARTPRODUCT,
+       payload: data,
+     };
+   }
+
+  
 
   export function Remove_CartProduct(data) {
     return {
