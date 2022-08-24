@@ -42,7 +42,8 @@ const WishProduct = () => {
   const RemoveWishItem = async (prod) => {
     if (prod.userId.length === 1) {
       try {
-        await deleteDoc(doc(db, "wishlist", prod.Wishid));
+        console.log(true,"true")
+        await deleteDoc(doc(db, "wishlist", prod.Wishid));  
         toast.info("Remove wishlist successfully", { theme: "colored" });
         dispatch(Delete_WishProduct(prod.Wishid));
       } catch (WIshDeleteError) {
@@ -50,8 +51,10 @@ const WishProduct = () => {
       }
     }
     else{
+      console.log(false,"false")
       const index = wishlist.indexOf(prod);
       let data = wishlist[index];
+      console.log(index,"index")
       const i = data.userId.indexOf(userdetail.uid);
       if (i > -1) {
         data.userId.splice(i, 1);

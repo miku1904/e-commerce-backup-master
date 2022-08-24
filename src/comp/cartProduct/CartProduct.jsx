@@ -8,7 +8,9 @@ import {
   where,
   doc,
   deleteDoc,
+  addDoc,
 } from "firebase/firestore";
+import { Remove_CartProduct } from "../../redux/action/CartAction";
 import { Edit_CartProduct } from "../../redux/action/CartAction";
 import { Fetch_Product } from "../../redux/action/ProductAction";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,14 +18,16 @@ import {
   Add_Qty,
   Dec_Qty,
   Fetch_CartProduct,
-  Remove_CartProduct,
 } from "../../redux/action/CartAction";
 import { db } from "../../firebase";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import { async } from "@firebase/util";
 // import { async } from "@firebase/util";
 
 const CartProduct = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userdetail = useSelector((state) => state.userReducer);
   const cartproduct = useSelector((state) => state.CartproductReducer);
@@ -86,17 +90,39 @@ const CartProduct = () => {
   }, [cartproduct, productdetail]);
 
   const Removecart = async (prod) => {
-    const data = cartproduct.map((item) => {
+    const updatedData = [];
+    const data = cartproduct.map(async (item) => {
       if (item.cartId === prod.cartId && item.userId === userdetail.uid) {
-        item.prodectDetail.map((data) =>{
-          if(data.id === prod.id){
-            
-          }
-        } );
+        if (item.prodectDetail.length === 1) {
+          // console.log("ja")
+          await deleteDoc(doc(db, "cart", item.cartId));
+          dispatch(Remove_CartProduct(item.cartId));
+        } else {
+          item.prodectDetail.map(async (data) => {
+            // console.log(data.id, "id")
+            if (data.id !== prod.id) {
+              // console.log(data.id, "id")
+              updatedData.push({ id: data.id, quantity: data.quantity });
+            }
+            // console.log(data)
+          });
+          console.log(item.cartId);
+          await setDoc(doc(db, "cart", item.cartId), {
+            cartId: item.cartId,
+            prodectDetail: updatedData,
+            userId: item.userId,
+          });
+          dispatch(
+            Edit_CartProduct({
+              cartId: item.cartId,
+              prodectDetail: updatedData,
+              userId: item.userId,
+            })
+          );
+        }
       }
     });
-        console.log(data)
-
+    // console.log(updatedData, "updatedData");
     // try {
     //   const cartProduct = {
     //     userId: userdetail?.uid,
@@ -116,27 +142,64 @@ const CartProduct = () => {
     // }
   };
 
-  const onIncrementQty = async (product) => {
-    console.log("prod");
-    totalPrice();
-    dispatch(Add_Qty(product.id));
-    const qty = product.qty;
-    const prodObj = { ...product, qty: qty };
-    await setDoc(doc(db, "cartproduct", product?.cartId), prodObj);
+  const onIncrementQty = async (prod) => {
+    const updatedData = [];
+    const data = cartproduct.map(async (item) => {
+      if (item.cartId === prod.cartId && item.userId === userdetail.uid) {
+        item.prodectDetail.map(async (data) => {
+          if (data.id !== prod.id) {
+            updatedData.push({ id: data.id, quantity: data.quantity });
+          } else {
+            updatedData.push({ id: data.id, quantity: data.quantity + 1 });
+          }
+        });
+        await setDoc(doc(db, "cart", item.cartId), {
+          cartId: item.cartId,
+          prodectDetail: updatedData,
+          userId: item.userId,
+        });
+        dispatch(
+          Edit_CartProduct({
+            cartId: item.cartId,
+            prodectDetail: updatedData,
+            userId: item.userId,
+          })
+        );
+      }
+    });
   };
 
-  const onDecrementQty = async (product) => {
-    totalPrice();
-    dispatch(Dec_Qty(product.id));
-    const qty = product.qty;
-    const prodObj = { ...product, qty: qty };
-    await setDoc(doc(db, "cartproduct", product?.cartId), prodObj);
+  const onDecrementQty = async (prod) => {
+    const updatedData = [];
+    const data = cartproduct.map(async (item) => {
+      if (item.cartId === prod.cartId && item.userId === userdetail.uid) {
+        item.prodectDetail.map(async (data) => {
+          if (data.id !== prod.id) {
+            updatedData.push({ id: data.id, quantity: data.quantity });
+          } else {
+            updatedData.push({ id: data.id, quantity: data.quantity - 1 });
+          }
+        });
+        await setDoc(doc(db, "cart", item.cartId), {
+          cartId: item.cartId,
+          prodectDetail: updatedData,
+          userId: item.userId,
+        });
+        dispatch(
+          Edit_CartProduct({
+            cartId: item.cartId,
+            prodectDetail: updatedData,
+            userId: item.userId,
+          })
+        );
+      }
+    });
   };
 
   const totalPrice = () => {
     let price = 0;
-    cartproduct.map((item) => {
-      const p = item.ProductPrice * item.qty;
+    CartData.map((item) => {
+      const p = item.ProductPrice * item.quantity;
       price += p;
     });
     setTPrice(price);
@@ -144,19 +207,16 @@ const CartProduct = () => {
 
   useEffect(totalPrice, [totalPrice]);
 
-  const PlaceOrder = () => {
-    let data = cartproduct.map((item) => {
-      if (item.userId === userdetail.uid) {
-        return item;
-      }
-    });
-    // data = data.filter((item) => item !== undefined);
-    const a = [];
-    data.forEach((item) => {
-      a.push(item);
-    });
-
-    console.log(a, "dha");
+  const PlaceOrder = async () => {
+    try {
+      await addDoc(collection(db, "orderDetail"), {productDetail:CartData,userEmail:userdetail.email});
+       toast.success("place order successfully");
+       await deleteDoc(doc(db, "cart", CartData[0].cartId));
+       dispatch(Remove_CartProduct(CartData[0].cartId));
+      navigate("/productdashboard");
+    } catch(Err) {
+      console.log(Err, "plcae order");
+    }
   };
 
   return (
@@ -191,12 +251,22 @@ const CartProduct = () => {
                     <div className={style.prductQty}>
                       <ul class="pagination justify-content-end set_quantity">
                         <li class="page-item">
-                          <button
-                            class="btn btn-primary"
-                            onClick={() => onDecrementQty(prod)}
-                          >
-                            -
-                          </button>
+                          {prod.quantity === 1 ? (
+                            <button
+                              class="btn btn-primary"
+                              onClick={() => onDecrementQty(prod)}
+                              disabled
+                            >
+                              -
+                            </button>
+                          ) : (
+                            <button
+                              class="btn btn-primary"
+                              onClick={() => onDecrementQty(prod)}
+                            >
+                              -
+                            </button>
+                          )}
                         </li>
                         <li class="page-item">
                           <input
@@ -228,7 +298,7 @@ const CartProduct = () => {
           <div className={style.pricetotal}>
             <div className={style.PeiceTotalQty}>
               <p>price :</p>
-              <p> (1 item)</p>
+              <p> ({CartData.length} item)</p>
             </div>
             <p>$ {tPrice}</p>
           </div>
@@ -238,7 +308,7 @@ const CartProduct = () => {
             <p>$ {tPrice}</p>
           </div>
           <button class={style.PlaceOrderButton} onClick={PlaceOrder}>
-            place order
+            Place Order
           </button>
         </div>
       </div>
