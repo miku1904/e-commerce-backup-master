@@ -25,14 +25,19 @@ import "react-toastify/dist/ReactToastify.css";
 import { Add_wishProduct } from "../../redux/action/WishAction";
 import { Add_CartProduct } from "../../redux/action/CartAction";
 
-const ProductCart = () => {
+const ProductCart = ({ search }) => {
   const [prodId, setprodId] = useState();
+  const [productData, setProductData] = useState([]);
   // const productsCollectionRef = collection(db, "Products");
   const dispatch = useDispatch();
   const WishPoduct = useSelector((state) => state.WishProductReducer);
-  const productdetail = useSelector((state) => state.productReducer);
+  let productdetail = useSelector((state) => state.productReducer);
   const CartproductReducer = useSelector((state) => state.CartproductReducer);
   const userdetail = useSelector((state) => state.userReducer);
+
+  useEffect(() => {
+    setProductData(productdetail);
+  }, [productdetail]);
 
   const addToWishList = async (product) => {
     const wishListData = WishPoduct.find((item) => item.id === product.id);
@@ -116,7 +121,7 @@ const ProductCart = () => {
       const doc = await getDocs(q);
 
       doc.forEach((doc) => {
-        dispatch(Fetch_Product({ ...doc.data(), id: doc.id }));
+        dispatch(Fetch_Product({ ...doc.data() }));
       });
     } catch (err) {
       console.error(err);
@@ -147,9 +152,24 @@ const ProductCart = () => {
     setWishListpro(a);
   }, [WishPoduct]);
 
+  const filteredPersons = () => {
+    const data = productdetail.filter((product) => {
+      return product.ProductName.toLowerCase().includes(search.toLowerCase());
+    });
+    setProductData(data);
+  };
+  useEffect(() => {
+    if (search) {
+      filteredPersons();
+    }
+    else{
+       setProductData(productdetail);
+    }
+  }, [search]);
+
   return (
     <>
-      {productdetail.map((prod, index) => {
+      {productData.map((prod, index) => {
         return (
           <div className={style.ProductCart} key={index}>
             <div className={style.IconImage_wrapper}>

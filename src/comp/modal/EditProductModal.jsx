@@ -20,6 +20,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 
 const EditProductModal = ({ prodId }) => {
+  // console.log(prodId);
   const dispatch = useDispatch();
   
   const [productImg, setProductimg] = useState();
@@ -42,7 +43,7 @@ const EditProductModal = ({ prodId }) => {
   useEffect(() => {
     setProductData(currentProject);
     // console.log(productData, "productData");
-  }, [prodId]);
+  }, [prodId, productdetail]);
 
   const handlechange = (e) => {
     const value = e.target.value;
@@ -71,6 +72,7 @@ const EditProductModal = ({ prodId }) => {
               ProductName: productData.ProductName,
               ProductImg: url,
               ProductPrice: productData.ProductPrice,
+              id: prodId,
             }).catch((err) => console.log(err));
             toast.success("Edit data successfully");
             dispatch(
@@ -89,6 +91,7 @@ const EditProductModal = ({ prodId }) => {
         ProductName: productData.ProductName,
         ProductImg: productData.ProductImg,
         ProductPrice: productData.ProductPrice,
+        id: prodId,
       }).catch((err) => console.log(err));
       toast.success("Edit data successfully")
       dispatch(

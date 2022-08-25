@@ -33,11 +33,12 @@ const CartproductReducer = (state = initialState, action) => {
       return state;
 
     case ADD_CARTPRODUCT:
+      console.log()
       return [...state, action.payload];
 
     case EDIT_CARTPRODUCT:
       const updatedState = state.map((product) =>
-        product.id === action.payload.id ? action.payload : product
+        product.cartId === action.payload.cartId ? action.payload : product
       );
       return updatedState;
 

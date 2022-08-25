@@ -88,7 +88,7 @@ const CartProduct = () => {
     });
     setCartData(carddata);
   }, [cartproduct, productdetail]);
-
+console.log(cartproduct);
   const Removecart = async (prod) => {
     const updatedData = [];
     const data = cartproduct.map(async (item) => {
@@ -210,7 +210,10 @@ const CartProduct = () => {
   const PlaceOrder = async () => {
     try {
       await addDoc(collection(db, "orderDetail"), {productDetail:CartData,userEmail:userdetail.email});
-       toast.success("place order successfully");
+       toast.success("place order successfully", {
+         theme: "colored",
+         position: toast.POSITION.TOP_CENTER,
+       });
        await deleteDoc(doc(db, "cart", CartData[0].cartId));
        dispatch(Remove_CartProduct(CartData[0].cartId));
       navigate("/productdashboard");

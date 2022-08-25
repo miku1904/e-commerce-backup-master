@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getDownloadURL, ref,  uploadBytesResumable } from "firebase/storage";
 import { storage, db } from "../../firebase";
 import {v4} from "uuid"
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc, setDoc ,doc } from "firebase/firestore"; 
 import "./AddProduct.css"
 import { useDispatch, useSelector } from "react-redux";
 import { Add_Product } from "../../redux/action/ProductAction";
@@ -51,18 +51,25 @@ const AddProduct = () => {
         getDownloadURL(upload.snapshot.ref)
         .then(async (url) => {
          productData.ProductImg = url;
-          await addDoc(collection(db, "Products"), {
+          const data = await addDoc(collection(db, "Products"), {
             ProductName: productData.ProductName,
             ProductPrice: Number(productData.ProductPrice),
             ProductImg: url,
-            // IsWishList:false
-          })  
-            dispatch(Add_Product(productData)); 
-            toast.success("Add product successfully")
-          });
-        }
-        )
-          e.target.reset();
+          })
+          const Uproductdata = {
+            ProductName: productData.ProductName,
+            ProductPrice: Number(productData.ProductPrice),
+            ProductImg: url,
+            id: data?.id
+          };
+          await setDoc(doc(db, "Products", data?.id), Uproductdata);
+          
+          dispatch(Add_Product(Uproductdata)); 
+          toast.success("Add product successfully")
+        });
+      }
+      )
+      e.target.reset();
     }
 
 

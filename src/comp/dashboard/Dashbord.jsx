@@ -46,8 +46,14 @@ const Dashbord = ({children}) => {
    }, [WishList]);
 
     useEffect(() => {
-      const data = cartproduct.filter((item) => item.userId === userdetail.uid);
-      setCartData(data);
+      const data = cartproduct.map(async (item) => {
+        if (item.userId === userdetail.uid) {
+      //  item.prodectDetail.length
+           setCartData(item.prodectDetail.length);
+          console.log(item.prodectDetail.length);
+          
+        }
+      })
     }, [cartproduct]);
 
   return (
@@ -106,7 +112,7 @@ const Dashbord = ({children}) => {
                 <div className={style.NavIcon}>
                   <Link to="/Cartdashboard" className={style.WishLink}>
                     <img src={Cart} alt="Cart" />
-                    <h5>({CartData.length}) Products -</h5>
+                    <h5>({CartData}) Products -</h5>
                   </Link>
                   <h4>$1000</h4>
                 </div>

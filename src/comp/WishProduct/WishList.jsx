@@ -2,10 +2,17 @@ import React from 'react'
 import style from "./WishList.module.css"
 import SearchIcon from "../../asert/SearchIcon.svg";
 import WishProduct from './WishProduct';
+import { useState } from 'react';
 
 
 
 const WishList = () => {
+  const [searchdata, setsearchdata] = useState();
+
+
+  const WishSearch = (e) => {
+    setsearchdata(e.target.value);
+  };
   return (
     <div>
       <div className={style.WishPageContainer}>
@@ -19,10 +26,11 @@ const WishList = () => {
           <input
             className={style.SearchBarInput}
             placeholder="Search among 1000+ products"
+            onChange={WishSearch}
           />
         </div>
         <div className={style.WishCartWrapper}>
-        <WishProduct />
+          <WishProduct searchdata={searchdata} />
         </div>
       </div>
     </div>

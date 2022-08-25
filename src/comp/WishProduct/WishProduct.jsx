@@ -12,11 +12,17 @@ import { Delete_WishProduct } from "../../redux/action/WishAction";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const WishProduct = () => {
+const WishProduct = ({ searchdata }) => {
   const dispatch = useDispatch();
   const userdetail = useSelector((state) => state.userReducer);
   const wishlist = useSelector((state) => state.WishProductReducer);
   const [wishlistData, setWishListData] = useState([]);
+  const [wishlistSearchData, setWishListSearchData] = useState([]);
+
+
+  useEffect(() => {
+    setWishListSearchData(wishlistData);
+  }, [wishlistData]);
 
   //Fetch Wish product data //
 
@@ -42,34 +48,33 @@ const WishProduct = () => {
   const RemoveWishItem = async (prod) => {
     if (prod.userId.length === 1) {
       try {
-        console.log(true,"true")
-        await deleteDoc(doc(db, "wishlist", prod.Wishid));  
+        console.log(true, "true");
+        await deleteDoc(doc(db, "wishlist", prod.Wishid));
         toast.info("Remove wishlist successfully", { theme: "colored" });
         dispatch(Delete_WishProduct(prod.Wishid));
       } catch (WIshDeleteError) {
         console.log(WIshDeleteError, "WIshDeleteError");
       }
-    }
-    else{
-      console.log(false,"false")
+    } else {
+      console.log(false, "false");
       const index = wishlist.indexOf(prod);
       let data = wishlist[index];
-      console.log(index,"index")
+      console.log(index, "index");
       const i = data.userId.indexOf(userdetail.uid);
       if (i > -1) {
         data.userId.splice(i, 1);
       }
-       try {
-         const WishPd = {
-           ...prod,
+      try {
+        const WishPd = {
+          ...prod,
           //  userId: [...wishListData.userId, userdetail?.uid],
-         };
-         await setDoc(doc(db, "wishlist",prod.Wishid), WishPd);
-         toast.info("Remove wishlist successfully", { theme: "colored" });
-         dispatch(Edit_WishProduct(WishPd));
-       } catch (error) {
-         console.log(error);
-       }
+        };
+        await setDoc(doc(db, "wishlist", prod.Wishid), WishPd);
+        toast.info("Remove wishlist successfully", { theme: "colored" });
+        dispatch(Edit_WishProduct(WishPd));
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -80,9 +85,28 @@ const WishProduct = () => {
     setWishListData(data);
   }, [wishlist]);
 
+
+
+  const filteredPersons = () => {
+    const data = wishlistData.filter((product) => {
+      return product.ProductName.toLowerCase().includes(
+        searchdata.toLowerCase()
+      );
+    });
+    setWishListSearchData(data);
+  };
+  useEffect(() => {
+    if (searchdata) {
+      filteredPersons();
+    } else {
+    setWishListSearchData(wishlistData);
+    }
+  }, [searchdata]);
+  console.log(searchdata)
+
   return (
     <>
-      {wishlistData.map((prod, index) => {
+      {wishlistSearchData.map((prod, index) => {
         return (
           <div className={style.ProductCart} key={index}>
             <div className={style.IconImage_wrapper}>
