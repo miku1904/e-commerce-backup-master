@@ -20,7 +20,6 @@ const WishProductReducer = (state = initialState, action) => {
         return false;
       });
       state = unique;
-      // console.log(state);
       return state;
 
     case ADD_WISHPRODUCT:
@@ -34,8 +33,6 @@ const WishProductReducer = (state = initialState, action) => {
 
     case DELETE_WISHPRODUCT:
       return state.filter((item) => item.Wishid !== action.payload);
-    // const Wstate = state.filter
-    // return [...state, action.payload];
 
     default:
       return state;

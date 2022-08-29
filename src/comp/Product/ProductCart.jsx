@@ -1,34 +1,38 @@
 import React, { useEffect, useState } from "react";
 import style from "./ProductCart.module.css";
 import CartIcon from "../../asert/Cart.svg";
-import { Edit_CartProduct } from "../../redux/action/CartAction";
-import { Edit_WishProduct } from "../../redux/action/WishAction";
+import {
+  Edit_CartProduct,
+  Add_CartProduct,
+} from "../../redux/action/CartAction";
+import {
+  Edit_WishProduct,
+  Add_wishProduct,
+} from "../../redux/action/WishAction";
 import DotMenu from "../../asert/DotMenu.svg";
 import WishIcon from "../../asert/CartIconBlanck.svg";
 import WishIconREd from "../../asert/WIshIConRed.svg";
-import { collection, getDoc, getDocs, setDoc } from "firebase/firestore";
+import {
+  collection,
+  getDoc,
+  getDocs,
+  setDoc,
+  query,
+  addDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import EditProductModal from "../modal/EditProductModal";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  query,
-  where,
-  addDoc,
-  doc,
-  deleteDoc,
-  updateDoc,
-} from "firebase/firestore";
 import { Fetch_Product } from "../../redux/action/ProductAction";
 import DeletModal from "../modal/DeletModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Add_wishProduct } from "../../redux/action/WishAction";
-import { Add_CartProduct } from "../../redux/action/CartAction";
+
 
 const ProductCart = ({ search }) => {
   const [prodId, setprodId] = useState();
   const [productData, setProductData] = useState([]);
-  // const productsCollectionRef = collection(db, "Products");
   const dispatch = useDispatch();
   const WishPoduct = useSelector((state) => state.WishProductReducer);
   let productdetail = useSelector((state) => state.productReducer);
@@ -39,9 +43,10 @@ const ProductCart = ({ search }) => {
     setProductData(productdetail);
   }, [productdetail]);
 
+  //add to wishlist product
+
   const addToWishList = async (product) => {
     const wishListData = WishPoduct.find((item) => item.id === product.id);
-    // console.log(userdetail?.uid);
     if (wishListData) {
       try {
         const WishPd = {
@@ -74,6 +79,8 @@ const ProductCart = ({ search }) => {
       }
     }
   };
+
+  //add to cart product
 
   const AddToCartProduct = async (product) => {
     const cartData = CartproductReducer.find(
@@ -134,7 +141,6 @@ const ProductCart = ({ search }) => {
 
   const getProductId = (prod) => {
     setprodId(prod);
-    // console.log(prod)
   };
 
   const [wishListpro, setWishListpro] = useState([]);
@@ -152,7 +158,7 @@ const ProductCart = ({ search }) => {
     setWishListpro(a);
   }, [WishPoduct]);
 
-  const filteredPersons = () => {
+  const filteredproducts = () => {
     const data = productdetail.filter((product) => {
       return product.ProductName.toLowerCase().includes(search.toLowerCase());
     });
@@ -160,10 +166,9 @@ const ProductCart = ({ search }) => {
   };
   useEffect(() => {
     if (search) {
-      filteredPersons();
-    }
-    else{
-       setProductData(productdetail);
+      filteredproducts();
+    } else {
+      setProductData(productdetail);
     }
   }, [search]);
 
@@ -176,12 +181,7 @@ const ProductCart = ({ search }) => {
               <div className={style.CartIconBlanck}>
                 {wishListpro.includes(prod.id) ? (
                   <>
-                    <img
-                      src={WishIconREd}
-                      alt=""
-                      type="button"
-                      // onClick={() => addToWishList(prod)}
-                    />
+                    <img src={WishIconREd} alt="" type="button" />
                   </>
                 ) : (
                   <>
@@ -206,15 +206,18 @@ const ProductCart = ({ search }) => {
                     src={DotMenu}
                     alt=""
                     type="button"
-                    class="btn dropdown-toggle"
+                    className="btn dropdown-toggle"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   />
                 )}
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <ul
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuLink"
+                >
                   <li>
                     <a
-                      class="dropdown-item"
+                      className="dropdown-item"
                       type="button"
                       data-bs-toggle="modal"
                       data-bs-target="#exampleEditProductModal "
@@ -225,7 +228,7 @@ const ProductCart = ({ search }) => {
                   </li>
                   <li>
                     <a
-                      class="dropdown-item"
+                      className="dropdown-item"
                       type="button"
                       data-bs-toggle="modal"
                       data-bs-target="#exampleDeleteProductModal"
@@ -262,49 +265,3 @@ const ProductCart = ({ search }) => {
 };
 
 export default ProductCart;
-
-// const data = await addDoc(collection(db, "cartproduct"), {
-//   // cartproduct: [product.id],
-//   userId: userdetail?.uid,
-// });
-
-// const pd = {
-//   // cartproduct: [product.id],
-//   userId: userdetail?.uid,
-//   cartId: data?.id,
-//   cartproduct: [
-//     { producId: product.id, quantity: 1 },
-//     { producId: product.id, quantity: 1 },
-//     // { producId: "abcd", quantity: 2 },
-//   ],
-// };
-// await setDoc(doc(db, "cartproduct", data?.id), pd);
-
-// try {
-//   let repeat = false;
-//   CartproductReducer?.map((item) => {
-//     if (item.id == product.id) {
-//       repeat = true;
-//     }
-//   });
-//   if (repeat == false) {
-//     const data = await addDoc(collection(db, "cartproduct"), {
-//       ...product,
-//       userId: userdetail?.uid,
-//       qty: 1,
-//     });
-//     const pd = {
-//       ...product,
-//       userId: userdetail?.uid,
-//       qty: 1,
-//       cartId: data?.id,
-//     };
-//     await setDoc(doc(db, "cartproduct", data?.id), pd);
-//     dispatch(Add_CartProduct(pd));
-//     toast.info("Add to cart successfully", { icon: "🛒" });
-//   } else {
-//     toast.error("This product already added", { icon: "🛒" });
-//   }
-// } catch (error) {
-//   console.log(error, "Addtocart");
-// }

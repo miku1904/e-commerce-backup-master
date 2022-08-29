@@ -1,60 +1,55 @@
-import React, { useEffect,useState } from 'react'
-import style from "./Dashbord.module.css"
-import logo from "../../asert/logo.svg"
-import Home from "../../asert/Home.svg"
-import ArrowHome from "../../asert/ArrowHome.svg"
-import UserProfile from "../../asert/UserProfile.svg"
-import HeartIcon from "../../asert/HeartIcon.svg"
-import Cart from "../../asert/Cart.svg"
-import ProductDashBord from '../Product/ProductDashBord'
+import React, { useEffect, useState } from "react";
+import style from "./Dashbord.module.css";
+import logo from "../../asert/logo.svg";
+import Home from "../../asert/Home.svg";
+import ArrowHome from "../../asert/ArrowHome.svg";
+import UserProfile from "../../asert/UserProfile.svg";
+import HeartIcon from "../../asert/HeartIcon.svg";
+import Cart from "../../asert/Cart.svg";
 import { auth, db } from "../../firebase";
 import { signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { LogoutUser } from "../../redux/action/User";
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer } from "react-toastify";
 
-const Dashbord = ({children}) => {
+const Dashbord = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [wishlistData, setWishListData] = useState([]);
-  const [CartData, setCartData] = useState([]);
-
+  const [CartData, setCartData] = useState();
 
   const userdetail = useSelector((state) => state.userReducer);
   const WishList = useSelector((state) => state.WishProductReducer);
   const cartproduct = useSelector((state) => state.CartproductReducer);
-  // console.log(WishList.length, "length");
 
   const handleLogOut = () => {
     signOut(auth);
     const userdata = {
-     name:"",
-     email: "",
-     pasword:"",
-     uid: "",
+      name: "",
+      email: "",
+      pasword: "",
+      uid: "",
     };
     dispatch(LogoutUser(userdata));
     navigate("/");
   };
 
-   useEffect(() => {
-     const data = WishList.filter((item) =>
-       item.userId.includes(userdetail.uid)
-     );
-     setWishListData(data);
-   }, [WishList]);
+  useEffect(() => {
+    const data = WishList.filter((item) =>
+      item.userId.includes(userdetail.uid)
+    );
+    setWishListData(data);
+  }, [WishList]);
 
-    useEffect(() => {
-      const data = cartproduct.map(async (item) => {
-        if (item.userId === userdetail.uid) {
-      //  item.prodectDetail.length
-           setCartData(item.prodectDetail.length);
-          console.log(item.prodectDetail.length);
-          
-        }
-      })
-    }, [cartproduct]);
+  useEffect(() => {
+    const data = cartproduct.find((item) => item.userId === userdetail.uid);
+    if (data) {
+      setCartData(data.prodectDetail.length);
+    } else {
+      setCartData(0);
+    }
+  }, [cartproduct]);
 
   return (
     <>
@@ -124,7 +119,6 @@ const Dashbord = ({children}) => {
       </div>
     </>
   );
-}
+};
 
 export default Dashbord;
- 

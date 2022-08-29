@@ -14,11 +14,8 @@ const AddProduct = () => {
   const [productData, setProductData] = useState({
     ProductName: "",
     ProductPrice: "",
-    // IsWishList:false
   });
   const [productImg, setProductimg] = useState(null);
-  const [productReduxData ,setProductReduxData] = useState()
-  // console.log(productData, "productData");
 
   const productImageHandler = (e) => {
     if (e.target.files[0]) {
@@ -45,7 +42,6 @@ const AddProduct = () => {
       const prog = Math.round(
         (snapshot.bytesTransferred/snapshot.totalBytes) * 100
         );  
-        console.log(prog);  
       },(err)=>console.log(err),
       () =>{
         getDownloadURL(upload.snapshot.ref)

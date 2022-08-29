@@ -9,8 +9,7 @@ const DeletModal = ({prodId}) => {
   const dispatch = useDispatch();
  
 
-    const deleteProduct = async(id) => {
-      // console.log(id); 
+    const deleteProduct = async(id) => { 
       try{
         await deleteDoc(doc(db , "Products", id))
         dispatch(Delete_product(id));

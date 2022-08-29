@@ -48,18 +48,14 @@ const WishProduct = ({ searchdata }) => {
   const RemoveWishItem = async (prod) => {
     if (prod.userId.length === 1) {
       try {
-        console.log(true, "true");
         await deleteDoc(doc(db, "wishlist", prod.Wishid));
         toast.info("Remove wishlist successfully", { theme: "colored" });
         dispatch(Delete_WishProduct(prod.Wishid));
       } catch (WIshDeleteError) {
-        console.log(WIshDeleteError, "WIshDeleteError");
       }
     } else {
-      console.log(false, "false");
       const index = wishlist.indexOf(prod);
       let data = wishlist[index];
-      console.log(index, "index");
       const i = data.userId.indexOf(userdetail.uid);
       if (i > -1) {
         data.userId.splice(i, 1);
@@ -67,7 +63,6 @@ const WishProduct = ({ searchdata }) => {
       try {
         const WishPd = {
           ...prod,
-          //  userId: [...wishListData.userId, userdetail?.uid],
         };
         await setDoc(doc(db, "wishlist", prod.Wishid), WishPd);
         toast.info("Remove wishlist successfully", { theme: "colored" });
@@ -87,7 +82,7 @@ const WishProduct = ({ searchdata }) => {
 
 
 
-  const filteredPersons = () => {
+  const filteredWishProducts = () => {
     const data = wishlistData.filter((product) => {
       return product.ProductName.toLowerCase().includes(
         searchdata.toLowerCase()
@@ -97,12 +92,11 @@ const WishProduct = ({ searchdata }) => {
   };
   useEffect(() => {
     if (searchdata) {
-      filteredPersons();
+      filteredWishProducts();
     } else {
     setWishListSearchData(wishlistData);
     }
   }, [searchdata]);
-  console.log(searchdata)
 
   return (
     <>

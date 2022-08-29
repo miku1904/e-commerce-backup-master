@@ -19,8 +19,6 @@ const ProductDashBord = () => {
 
   const handlesearch = (e) =>{
     setsearch(e.target.value);
-
-    
   }
   //Fetch cart product data //
 
@@ -29,7 +27,6 @@ const ProductDashBord = () => {
       const q = query(collection(db, "cart"));
       const doc = await getDocs(q);
       doc.forEach(async (doc) => {
-        // console.log({ ...doc.data() });
         dispatch(Fetch_CartProduct({ ...doc.data() }));
       });
     } catch (err) {

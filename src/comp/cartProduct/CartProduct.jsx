@@ -5,7 +5,6 @@ import {
   getDocs,
   query,
   setDoc,
-  where,
   doc,
   deleteDoc,
   addDoc,
@@ -15,16 +14,12 @@ import { Edit_CartProduct } from "../../redux/action/CartAction";
 import { Fetch_Product } from "../../redux/action/ProductAction";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Add_Qty,
-  Dec_Qty,
   Fetch_CartProduct,
 } from "../../redux/action/CartAction";
 import { db } from "../../firebase";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import { async } from "@firebase/util";
-// import { async } from "@firebase/util";
 
 const CartProduct = () => {
   const navigate = useNavigate();
@@ -57,7 +52,6 @@ const CartProduct = () => {
       const q = query(collection(db, "cart"));
       const doc = await getDocs(q);
       doc.forEach(async (doc) => {
-        // console.log({ ...doc.data() });
         dispatch(Fetch_CartProduct({ ...doc.data() }));
       });
     } catch (err) {
@@ -88,23 +82,21 @@ const CartProduct = () => {
     });
     setCartData(carddata);
   }, [cartproduct, productdetail]);
-console.log(cartproduct);
+
+  //remove cart product
+  
   const Removecart = async (prod) => {
     const updatedData = [];
     const data = cartproduct.map(async (item) => {
       if (item.cartId === prod.cartId && item.userId === userdetail.uid) {
         if (item.prodectDetail.length === 1) {
-          // console.log("ja")
           await deleteDoc(doc(db, "cart", item.cartId));
           dispatch(Remove_CartProduct(item.cartId));
         } else {
           item.prodectDetail.map(async (data) => {
-            // console.log(data.id, "id")
             if (data.id !== prod.id) {
-              // console.log(data.id, "id")
               updatedData.push({ id: data.id, quantity: data.quantity });
             }
-            // console.log(data)
           });
           console.log(item.cartId);
           await setDoc(doc(db, "cart", item.cartId), {
@@ -122,25 +114,9 @@ console.log(cartproduct);
         }
       }
     });
-    // console.log(updatedData, "updatedData");
-    // try {
-    //   const cartProduct = {
-    //     userId: userdetail?.uid,
-    //     cartId: cartData.cartId,
-    //     prodectDetail: [
-    //       ...cartData.prodectDetail,
-    //       { id: product.id, quantity: 1 },
-    //     ],
-    //   };
-    //   await setDoc(doc(db, "cart", prod.cartId), cartProduct);
-    //   toast.info("Product deleted from cart successfully", {
-    //     theme: "colored",
-    //   });
-    //   dispatch(Edit_CartProduct(cartProduct));
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
+
+  //increment quantity
 
   const onIncrementQty = async (prod) => {
     const updatedData = [];
@@ -169,6 +145,8 @@ console.log(cartproduct);
     });
   };
 
+  //decrement quantity
+
   const onDecrementQty = async (prod) => {
     const updatedData = [];
     const data = cartproduct.map(async (item) => {
@@ -196,6 +174,8 @@ console.log(cartproduct);
     });
   };
 
+ // total price of order
+
   const totalPrice = () => {
     let price = 0;
     CartData.map((item) => {
@@ -209,15 +189,18 @@ console.log(cartproduct);
 
   const PlaceOrder = async () => {
     try {
-      await addDoc(collection(db, "orderDetail"), {productDetail:CartData,userEmail:userdetail.email});
-       toast.success("place order successfully", {
-         theme: "colored",
-         position: toast.POSITION.TOP_CENTER,
-       });
-       await deleteDoc(doc(db, "cart", CartData[0].cartId));
-       dispatch(Remove_CartProduct(CartData[0].cartId));
+      await addDoc(collection(db, "orderDetail"), {
+        productDetail: CartData,
+        userEmail: userdetail.email,
+      });
+      toast.success("place order successfully", {
+        theme: "colored",
+        position: toast.POSITION.TOP_CENTER,
+      });
+      await deleteDoc(doc(db, "cart", CartData[0].cartId));
+      dispatch(Remove_CartProduct(CartData[0].cartId));
       navigate("/productdashboard");
-    } catch(Err) {
+    } catch (Err) {
       console.log(Err, "plcae order");
     }
   };
@@ -252,11 +235,11 @@ console.log(cartproduct);
                       <p className={style.ProductPrize}>$2000</p>
                     </div>
                     <div className={style.prductQty}>
-                      <ul class="pagination justify-content-end set_quantity">
-                        <li class="page-item">
+                      <ul className="pagination justify-content-end set_quantity">
+                        <li className="page-item">
                           {prod.quantity === 1 ? (
                             <button
-                              class="btn btn-primary"
+                              className="btn btn-primary"
                               onClick={() => onDecrementQty(prod)}
                               disabled
                             >
@@ -264,14 +247,14 @@ console.log(cartproduct);
                             </button>
                           ) : (
                             <button
-                              class="btn btn-primary"
+                              className="btn btn-primary"
                               onClick={() => onDecrementQty(prod)}
                             >
                               -
                             </button>
                           )}
                         </li>
-                        <li class="page-item">
+                        <li className="page-item">
                           <input
                             type="text"
                             className={style.QtyInput}
@@ -279,9 +262,9 @@ console.log(cartproduct);
                             id="textbox"
                           />
                         </li>
-                        <li class="page-item">
+                        <li className="page-item">
                           <button
-                            class="btn btn-primary"
+                            className="btn btn-primary"
                             onClick={() => onIncrementQty(prod)}
                           >
                             +
@@ -310,7 +293,7 @@ console.log(cartproduct);
             <p>Total Amount</p>
             <p>$ {tPrice}</p>
           </div>
-          <button class={style.PlaceOrderButton} onClick={PlaceOrder}>
+          <button className={style.PlaceOrderButton} onClick={PlaceOrder}>
             Place Order
           </button>
         </div>

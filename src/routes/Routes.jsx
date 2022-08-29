@@ -7,7 +7,7 @@ import CartProduct from "../comp/cartProduct/CartProduct";
 import SignIn from "../comp/signIn/SigIn";
 import SignUp from "../comp/signUp/SignUp";
 import { useDispatch, useSelector } from "react-redux";
-import ProtectedRoute from "../comp/ProtectedRoute";
+// import ProtectedRoute from "../comp/ProtectedRoute";
 
 
 

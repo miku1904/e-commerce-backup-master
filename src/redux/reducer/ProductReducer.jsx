@@ -20,7 +20,6 @@ const productReducer = (state = initialState, action) => {
         return false;
       });
       state = unique;
-      // console.log(state);
       return state;
 
     case ADD_PRODUCT:

@@ -7,20 +7,13 @@ import { v4 } from "uuid";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'; 
 import {
-  collection,
-  addDoc,
-  updateDoc,
   doc,
-  query,
-  where,
-  getDocs,
   setDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 
 const EditProductModal = ({ prodId }) => {
-  // console.log(prodId);
   const dispatch = useDispatch();
   
   const [productImg, setProductimg] = useState();
@@ -30,9 +23,7 @@ const EditProductModal = ({ prodId }) => {
     id: "",
   });
   const productdetail = useSelector((state) => state.productReducer);
-  // console.log(projectDetail,'product')
   let currentProject = productdetail.find((item) => item.id === prodId);
-  // console.log(productData, "currentProduct");
 
   const productImageHandler = (e) => {
     if (e.target.files[0]) {
@@ -42,7 +33,6 @@ const EditProductModal = ({ prodId }) => {
 
   useEffect(() => {
     setProductData(currentProject);
-    // console.log(productData, "productData");
   }, [prodId, productdetail]);
 
   const handlechange = (e) => {
@@ -63,7 +53,6 @@ const EditProductModal = ({ prodId }) => {
           const prog = Math.round(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           );
-          console.log(prog);
         },
         (err) => console.log(err),
         () => {
@@ -119,7 +108,6 @@ const EditProductModal = ({ prodId }) => {
               <h5 className="modal-title me-5" id="exampleEditProductLabel">
                 Edit product
               </h5>
-              {/* <h5>{productData?.id}</h5> */}
               <button
                 type="button"
                 className="btn-close"
@@ -138,7 +126,7 @@ const EditProductModal = ({ prodId }) => {
                 </div>
                 <div className="input-group mb-3">
                   <input
-                    class="form-control"
+                    className="form-control"
                     type="file"
                     id="formFile"
                     onChange={productImageHandler}

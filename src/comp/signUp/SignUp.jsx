@@ -30,12 +30,10 @@ const SignUp = () => {
       [e.target.name]: value,
     });
   }
-  console.log(data);
 
   const  handleSubmit = (e) =>{
     e.preventDefault();
     const isValid = Formvalidation();
-    console.log(isValid)
     if(isValid){
       createUserWithEmailAndPassword(auth, data.email, data.password)
       .then(async (r) => {
@@ -68,14 +66,12 @@ const Formvalidation = () => {
   const emailErr = {}
   const passwordErr = {}
   let isValid = true;
-  console.log(data.name.trim().length)
   if(data.name.trim().length < 5) {
 
     nameErr.firstNameShort = "name is to short"
     isValid = false;
   }
 
-  // if(validateEmail(data.email)){
     const email = data.email;
     if (validateEmail(email)) {
     

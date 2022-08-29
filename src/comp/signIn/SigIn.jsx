@@ -26,7 +26,7 @@ const handleLogInChange = (e) =>{
   });
   
 }
-// console.log(ldata)
+
 
 const handleSubmit = (e) =>{
    e.preventDefault();
@@ -35,7 +35,6 @@ const handleSubmit = (e) =>{
    signInWithEmailAndPassword(auth, ldata.email, ldata.password)
    .then(async (res) => {
         toast.success("Log In sucess Welcome")  
-        console.log(res.user);
         navigate("/productdashboard");
       })
       .catch((err) => {
@@ -57,8 +56,6 @@ const handleSubmit = (e) =>{
      const emailErr = {};
      const passwordErr = {};
      let isValid = true;
-
-     // if(validateEmail(data.email)){
      const email = ldata.email;
      if (validateEmail(email)) {
      } else {
