@@ -29,7 +29,6 @@ import DeletModal from "../modal/DeletModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const ProductCart = ({ search }) => {
   const [prodId, setprodId] = useState();
   const [productData, setProductData] = useState([]);
@@ -86,21 +85,47 @@ const ProductCart = ({ search }) => {
     const cartData = CartproductReducer.find(
       (item) => item.userId === userdetail?.uid
     );
+    const id = cartData?.prodectDetail.map((item) => {
+      return item.id;
+    });
     if (cartData) {
-      try {
-        const cartProduct = {
-          userId: userdetail?.uid,
-          cartId: cartData.cartId,
-          prodectDetail: [
-            ...cartData.prodectDetail,
-            { id: product.id, quantity: 1 },
-          ],
-        };
-        await setDoc(doc(db, "cart", cartData.cartId), cartProduct);
-        toast.info("Add to cart successfully", { theme: "colored" });
-        dispatch(Edit_CartProduct(cartProduct));
-      } catch (error) {
-        console.log(error);
+      if (id?.includes(product.id)) {
+        let prodectDetail = cartData?.prodectDetail.map(
+          (item) =>{if(item.id === product.id){
+            return {id:product.id, quantity:item.quantity + 1 }
+          }} 
+        );
+        prodectDetail = prodectDetail.filter( (element)=> {
+          return element !== undefined;
+        });
+        let data = cartData?.prodectDetail.filter((item)=>item.id !== product.id);
+        try {
+          const cartProduct = {
+            ...cartData,
+            prodectDetail: [...data, prodectDetail[0]],
+          };
+          await setDoc(doc(db, "cart", cartData.cartId), cartProduct);
+          toast.info("Add to cart successfully", { theme: "colored" });
+          dispatch(Edit_CartProduct(cartProduct));
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        try {
+          const cartProduct = {
+            userId: userdetail?.uid,
+            cartId: cartData.cartId,
+            prodectDetail: [
+              ...cartData.prodectDetail,
+              { id: product.id, quantity: 1 },
+            ],
+          };
+          await setDoc(doc(db, "cart", cartData.cartId), cartProduct);
+          toast.info("Add to cart successfully", { theme: "colored" });
+          dispatch(Edit_CartProduct(cartProduct));
+        } catch (error) {
+          console.log(error);
+        }
       }
     } else {
       try {
@@ -121,6 +146,9 @@ const ProductCart = ({ search }) => {
       }
     }
   };
+
+
+  
 
   const fetchProductData = async () => {
     try {

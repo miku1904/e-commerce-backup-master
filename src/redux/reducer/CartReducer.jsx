@@ -1,5 +1,4 @@
-
-import { useSelector } from "react-redux"; 
+import { useSelector } from "react-redux";
 import {
   FETCH_CARTPRODUCT,
   ADD_CARTPRODUCT,
@@ -11,12 +10,9 @@ import {
 
 let initialState = [];
 
-
-
 const CartproductReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_CARTPRODUCT:
-
       const uState = [...state, action.payload];
       const uniqueIds = [];
       const unique = uState.filter((element) => {
@@ -30,6 +26,7 @@ const CartproductReducer = (state = initialState, action) => {
       state = unique;
       return state;
 
+      
     case ADD_CARTPRODUCT:
       return [...state, action.payload];
 
@@ -46,6 +43,5 @@ const CartproductReducer = (state = initialState, action) => {
       return state;
   }
 };
-
 
 export default CartproductReducer;
