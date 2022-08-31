@@ -105,7 +105,9 @@ const ProductCart = ({ search }) => {
             prodectDetail: [...data, prodectDetail[0]],
           };
           await setDoc(doc(db, "cart", cartData.cartId), cartProduct);
-          toast.info("Add to cart successfully", { theme: "colored" });
+          toast.info("Same Product Quantity inc successfully", {
+            theme: "colored",
+          });
           dispatch(Edit_CartProduct(cartProduct));
         } catch (error) {
           console.log(error);

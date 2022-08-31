@@ -8,6 +8,7 @@ import {
   doc,
   deleteDoc,
   addDoc,
+  where,
 } from "firebase/firestore";
 import { Remove_CartProduct } from "../../redux/action/CartAction";
 import { Edit_CartProduct } from "../../redux/action/CartAction";
@@ -29,6 +30,8 @@ const CartProduct = () => {
   const productdetail = useSelector((state) => state.productReducer);
   const [tPrice, setTPrice] = useState();
   const [CartData, setCartData] = useState([]);
+  const [promocode ,setpromocode]= useState()
+
 
   const fetchProductData = async () => {
     try {
@@ -92,17 +95,22 @@ const CartProduct = () => {
         if (item.prodectDetail.length === 1) {
           await deleteDoc(doc(db, "cart", item.cartId));
           dispatch(Remove_CartProduct(item.cartId));
+            toast.error("Remove cartItem successfully", {
+              theme: "colored",
+            }); 
         } else {
           item.prodectDetail.map(async (data) => {
             if (data.id !== prod.id) {
               updatedData.push({ id: data.id, quantity: data.quantity });
             }
           });
-          console.log(item.cartId);
           await setDoc(doc(db, "cart", item.cartId), {
             cartId: item.cartId,
             prodectDetail: updatedData,
             userId: item.userId,
+          });
+          toast.error("Remove cartItem successfully", {
+            theme: "colored",
           });
           dispatch(
             Edit_CartProduct({
@@ -174,6 +182,10 @@ const CartProduct = () => {
     });
   };
 
+const Applypromocode =() =>{
+   const q = query(collection(db, "promoCode"), where("PromoCode", "==", promocode));
+}
+  
  // total price of order
 
   const totalPrice = () => {
@@ -204,7 +216,7 @@ const CartProduct = () => {
       console.log(Err, "plcae order");
     }
   };
-
+  
   return (
     <>
       <div className={style.cartpagemain}>
@@ -292,6 +304,17 @@ const CartProduct = () => {
           <div className={style.pricetotalAmount}>
             <p>Total Amount</p>
             <p>$ {tPrice}</p>
+          </div>
+          <div>
+            <input
+              type="text"
+              name="promocode"
+              className="form-control mt-5"
+              id="exampleFormControlInput1"
+              placeholder="Have a promo code ?"
+              onChange={(e)=>setpromocode(e.target.value)}
+            />
+            <button className={style.PromoApply} onClick={Applypromocode}>Apply</button>
           </div>
           <button className={style.PlaceOrderButton} onClick={PlaceOrder}>
             Place Order
